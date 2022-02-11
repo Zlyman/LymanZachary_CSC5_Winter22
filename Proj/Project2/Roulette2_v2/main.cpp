@@ -2,8 +2,8 @@
 /*
  * File:   main.cpp
  * Author: Zachary Lyman
- * Created on January 29, 2022, 5:45 PM
- * Purpose: Play Roulette
+ * Created on February 10, 2022, 5:00 PM
+ * Purpose: Implament new wheel and functions 
  */
 
 // System Level Libraries
