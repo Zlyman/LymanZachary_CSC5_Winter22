@@ -2,7 +2,7 @@
 /*
  * File:   main.cpp
  * Author: Zachary Lyman
- * Created on February 10, 2022, 8:00 PM
+ * Created on February 11, 2022, 1:00 PM
  * Purpose: Implament new wheel and functions
  */
 
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     //Declare Variables
     const int ANSWR=100;
     unsigned int random;
-    int space,indx,sglNum;     //Number of games to play test
+    int space,indx,sglNum;     
     int wheel[ROWS][COLS]={{37,28,9,26,30,11,7,20,32,17,5,22,34,15,3,24,36,13,
                              1,38,27,10,25,29,12,8,19,31,18,6,21,33,16,4,23,35,
                             14,2},{0,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,0,2,1,
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
     vector<unsigned char> selLog;
     float usrBank,betAmnt;
     unsigned char sel,//User selection
-                      betSel;
+               betSel;
     string ballPos,//Stores ball position for 0 and 00
            logLine,//Stores previous ball positions
              color;//Stores number color
@@ -88,33 +88,31 @@ int main(int argc, char** argv) {
         }
  
     //Map the inputs/knowns to the outputs
+    //Functions to fill and sort answer array
     fillAns(ans,ANSWR);
     bblSrtA(ans,ANSWR);
     
     do{
+        //Game Header
         cout<<"-----------------------ROULETTE-----------------------"<<endl;
         cout<<fixed<<showpoint<<setprecision(2);
         cout<<"Enter bet by choosing an option from the menu"<<endl;
         cout<<"Please remember that the minimum bet is $5.00"<<endl;
         
-        
+        //Calls choice function for player input
         if(choice(select,bet,usrBank,betNum)){
             sel='q';
         }
-       
-        
-        
-        
         cout<<"******************************************************"<<endl;
         indx=0;
         //Simulate the spin of a roulette wheel
         random=rand()%720;
-         //Simulate the spin of a roulette wheel
         indx=spinWhl(wheel,COLS, random);
         //Set number and color for each number on roulette wheel
         space=asgnNum (wheel,COLS,indx);
         color=asgnClr(wheel,COLS,indx);
         
+    //Loop to determine bet results    
     for(unsigned int i=0;i<select.size();i++){
         //Reset variables
         betAmnt=0;//Resets bet to 0
@@ -126,9 +124,26 @@ int main(int argc, char** argv) {
         betSel=select[i];
         //Read single number vector
         sglNum=betNum[i];
-        
-        //*******************************************//
-
+        //Inputs ball position to a file
+        if(i==0){
+            if(space>0&&space<37){
+                ballLog.open("BallLog.txt",ios::app);
+                if(ballLog){
+                    ballLog<<setw(2)<<space<<" - ";
+                    if(color=="black")ballLog<<color<<endl;
+                    if(color=="red")ballLog<<color<<endl;
+                    ballLog.close();
+                }
+            }
+            else{
+                space==37?ballPos="0":ballPos="00";
+                ballLog.open("BallLog.txt",ios::app);
+                if(ballLog){
+                    ballLog<<setw(2)<<ballPos<<endl;
+                    ballLog.close();
+                }
+            }
+        }
         //If ball lands on non zero space
         if(space>0&&space<37){
             cout<<"------------------------RESULT------------------------"<<endl;
@@ -204,23 +219,10 @@ int main(int argc, char** argv) {
                     betLog.push_back(0);
                 }
             }
-            ballLog.open("BallLog.txt",ios::app);
-            if(ballLog){
-               ballLog<<setw(2)<<space<<" - ";
-               if(color=="black")ballLog<<color<<endl;
-               if(color=="red")ballLog<<color<<endl;
-               ballLog.close();
-            }
             selLog.push_back(betSel);
         }//If ball lands on zero space
         else{
             space==37?ballPos="0":ballPos="00";
-
-            ballLog.open("BallLog.txt",ios::app);
-            if(ballLog){
-               ballLog<<setw(2)<<ballPos<<endl;
-               ballLog.close();
-            }
             cout<<"------------------------RESULT------------------------"<<endl;
             cout<<"The ball landed on "<<ballPos<<endl;
             if(betSel!='s'||betSel!='S')cout<<"You lose $"<<setw(6)<<betAmnt<<endl;
@@ -245,11 +247,11 @@ int main(int argc, char** argv) {
         }
         if(sel=='q'||sel=='Q'){
             cout<<"Payout   $"<<setw(6)<<usrBank<<endl;
-            cout<<"-----------------------END-GAME-----------------------";
+            cout<<"-----------------------END-GAME-----------------------"<<endl;
         }
     }
 
-         //Empty Vectors to make new bets
+        //Empty Vectors to make new bets
         select.clear();
         bet.clear();
         betNum.clear();
@@ -265,8 +267,8 @@ int main(int argc, char** argv) {
     cout<<"\nWhat is the answer to the ultimate question in life?"<<endl;
     int val=42;
     int ansI=binSrch(ans,ANSWR,val);
-    if(ansI!=-1)cout<<"The answer is - "<<val<<" at index "<<ansI<<endl;
-    else cout<<"\nI guess we'll never truly know"<<endl;
+    if(ansI!=-1)cout<<"The answer is: "<<val<<" at index "<<ansI<<endl;
+    else cout<<"\nAnswer was not found"<<endl;
  
     //Exit the program
 
@@ -368,6 +370,9 @@ bool choice(vector <unsigned char> &select,vector <float> &bet
     do{
        cout<<"Input your selection"<<endl;
        cin>>s;
+       if(s=='x'||s=='X'){
+           exit(0);
+       }
        if(repeat=='y'||repeat=='Y'){
            while(s=='q'||s=='Q'){
                cout<<"You have a bet in progress"<<endl;
@@ -394,14 +399,22 @@ bool choice(vector <unsigned char> &select,vector <float> &bet
            cout<<"Enter your bet in dollars"<<endl;
            cin>>b;
            //Validate user input
-            while(b<5){
-            cout<<"$5.00 minimum bet"<<endl;
-            cout<<"Please enter a valid bet"<<endl;
-            cin>>b;
+           while(b<5){
+                cout<<"$5.00 minimum bet"<<endl;
+                cout<<"Please enter a valid bet"<<endl;
+                cin>>b;
             }
+           while(b>usrBank){
+               cout<<"You only have $"<<usrBank<<" to bet with"<<endl;
+               cout<<"Enter a bet that does not exceed $"<<usrBank<<endl;
+               cin>>b;
+           }
            bet.push_back(b);
+           usrBank-=b;
+           cout<<"You have $"<<usrBank<<" remaining"<<endl;
            cout<<"Would you like to place more bets? Y/N"<<endl;
            cin>>repeat;
+           if(usrBank<5.0f)repeat='n';
        }
        else{
            //repeat='n';
@@ -421,12 +434,10 @@ void dpslMnu(float usrBank){
     cout<<"O - All Odd Numbers             -  1:1 Payout"<<endl;
     cout<<"L - Numbers from 1 to 18        -  1:1 Payout"<<endl;
     cout<<"H - Numbers from 19 to 36       -  1:1 Payout"<<endl;
-    cout<<"C - First, Second, Third Column -  2:1 Payout"<<endl;
-    cout<<"D - First, Second, Third Column -  2:1 Payout"<<endl;
-    cout<<"F - Four Number Corner          -  8:1 Payout"<<endl;
     cout<<"S - Chose a Single Number       - 35:1 Payout"<<endl;
     cout<<"P - View Previous Numbers"<<endl;
     cout<<"Q - Quit playing"<<endl;
+    cout<<"X - Terminate Game - Warning! No Payout"<<endl;
     cout<<"-------------------------PLAY-------------------------"<<endl;
 }
 
