@@ -277,6 +277,7 @@ int main(int argc, char** argv) {
 }
 
 int  binSrch(int a[],int n,int val){
+    static int gameNum
     int high=n-1,low=0;
     do{
         int middle=(high+low)/2;
