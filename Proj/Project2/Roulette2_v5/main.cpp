@@ -27,9 +27,11 @@ using namespace std;
 // These are recognized constants from the sciences
 //Physics/Chemistry/Engineering and Conversions between
 //systems of units!
-                    //which are constant, 38 spaces and 2 colors per wheel
-                    //These are needed to use mutli-dimensional arrays within 
-                    //my functional prototypes 
+                    
+
+
+
+
 //Function Prototypes
 int spinWhl(int [][38],int,int);
 int asgnNum (int [][38],int,int);
@@ -50,12 +52,10 @@ int gameCnt(int);
 void dspGCnt(int,int lghtSp=186282);
 
 //Execution begins here!
-
 int main(int argc, char** argv) {
 
     //Initialize Random Seed once here!
     srand(static_cast<unsigned int>(time(0)));
-
     //Declare Variables
     const int ROWS=2;   //Note: These are not global variables
     const int COLS=38;  //These are the mathematical dimensions of a roulette wheel
