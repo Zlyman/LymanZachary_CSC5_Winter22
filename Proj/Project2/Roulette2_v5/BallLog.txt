@@ -1,8 +1,1 @@
 Ball Log
- 4 - black
-25 - red
- 7 - red
-12 - red
-16 - red
-10 - black
-31 - black

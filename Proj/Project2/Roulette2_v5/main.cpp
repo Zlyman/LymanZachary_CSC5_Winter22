@@ -2,7 +2,7 @@
 /*
  * File:   main.cpp
  * Author: Zachary Lyman
- * Created on February 11, 2022, 1:00 PM
+ * Created on February 12, 2022, 4:00 PM
  * Purpose: Implament new wheel and functions
  */
 
@@ -248,7 +248,7 @@ int main(int argc, char** argv) {
         }
         cout<<"You have $"<<setw(6)<<usrBank<<endl;
         if(usrBank<5){
-            cout<<"You have insuficient funds - GAME OVER!"<<endl;
+            cout<<"You have insufficient funds - GAME OVER!"<<endl;
             sel='q';
         }
         if(sel=='q'||sel=='Q'){
@@ -287,7 +287,7 @@ int main(int argc, char** argv) {
 
 void dspGCnt(int games,int lghtSp){
     cout<<"Games played: "<<games-1<<endl;
-    cout<<"This message is reaching your eyes at "<<lghtSp<<" MPH"<<endl;
+    cout<<"This message is reaching your eyes at "<<lghtSp<<" MPS"<<endl;
 }
 
 int gameCnt(int gCount){
